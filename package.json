@@ -1,0 +1,26 @@
+{
+  "name": "yourcodenotes-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fedorchukivan/yourcodenotes-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fedorchukivan/yourcodenotes-server/issues"
+  },
+  "homepage": "https://github.com/fedorchukivan/yourcodenotes-server#readme",
+  "dependencies": {
+    "dotenv": "^16.1.3",
+    "express": "^4.18.2",
+    "knex": "^2.4.2",
+    "pg": "^8.11.0"
+  }
+}
