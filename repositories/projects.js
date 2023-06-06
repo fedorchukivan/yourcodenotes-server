@@ -57,6 +57,10 @@ export default class ProjectsRepository {
                   .then(this.fetchProjectsAdditionalInfo);
   }
   
+  getProject = async (data) => {
+    return await this.db('projects').where(data).first();
+  }
+  
   getUserSharedProjects = async (user_id) => {
     return await this.db.select('title', 'creator_id', 'projects.project_id')
                   .innerJoin('project_participant', 'project_participant.project_id', 'projects.project_id')
@@ -85,14 +89,22 @@ export default class ProjectsRepository {
   }
   
   removeParticipant = async (data) => {
-    return await this.db.select('*').from('project_participant')
-                    .where(data)
+    return await this.getUser({ email: data.email })
+              .then(async user => {
+                if (!user || user.role === 'admin') return null;
+                const entity = {
+                  project_id: data.project_id,
+                  user_id: user.user_id
+                };
+                return await this.db.select('*').from('project_participant')
+                    .where(entity)
                     .first()
                     .then(async link => {
                       if (!link) return null;
                       return (await this.db('project_participant')
-                                        .where(data)
-                                        .del(['user_id']))[0];
-    });
+                                        .where(entity)
+                                        .del(['user_id', 'project_id']))[0];
+                });
+              });
   }
 }

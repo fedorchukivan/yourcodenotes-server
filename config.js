@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const serverConfig = {
-  port: process.env.SERVER_PORT
+  port: process.env.SERVER_PORT,
+  jwt_secret: process.env.JWT_SECRET
 };
 
 const dbConfig = { 

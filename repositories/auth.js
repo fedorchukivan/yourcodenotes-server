@@ -12,6 +12,6 @@ export default class AuthRepository {
   }
 
   createUser = async (data) => {
-    return (await this.db.insert(data, ['*']).into('users'))[0];
+    return (await this.db.insert(data, ['user_id']).into('users'))[0];
   }
 }
