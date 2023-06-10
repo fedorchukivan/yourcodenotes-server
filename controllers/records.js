@@ -69,7 +69,13 @@ export async function GetUserRecords(req, res) {
   try {
     const tokenPayload = authorize(req);
     if (tokenPayload) {
-      const records = await recordsRepository.getUserRecords(tokenPayload.user_id);
+      let records = await recordsRepository.getUserRecords(tokenPayload.user_id);
+      if (req.body.titleFilter) {
+        records = records.filter(r => r.title.includes(req.body.titleFilter));
+      }
+      else if (req.body.tagFilter) {
+        records = records.filter(r => r.tags.map(t => t.name).includes(req.body.tagFilter));
+      }
       res.status(200).send(records);
     }
     else {
@@ -83,7 +89,13 @@ export async function GetUserRecords(req, res) {
 
 export async function GetOpenRecords(req, res) {
   try {
-    const records = await recordsRepository.getPublicRecords();
+    let records = await recordsRepository.getPublicRecords();
+    if (req.body.titleFilter) {
+      records = records.filter(r => r.title.includes(req.body.titleFilter));
+    }
+    else if (req.body.tagFilter) {
+      records = records.filter(r => r.tags.map(t => t.name).includes(req.body.tagFilter));
+    }
     res.status(200).send(records);
   }
   catch (error) {
@@ -95,7 +107,13 @@ export async function GetSectionRecords(req, res) {
   try {
     const tokenPayload = authorize(req);
     if (tokenPayload) {
-      const records = await recordsRepository.getSectionRecords(req.params.sectionId);
+      let records = await recordsRepository.getSectionRecords(req.params.sectionId);
+      if (req.body.titleFilter) {
+        records = records.filter(r => r.title.includes(req.body.titleFilter));
+      }
+      else if (req.body.tagFilter) {
+        records = records.filter(r => r.tags.map(t => t.name).includes(req.body.tagFilter));
+      }
       res.status(200).send(records);
     }
     else {

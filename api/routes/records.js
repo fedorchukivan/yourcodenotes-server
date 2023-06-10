@@ -3,9 +3,9 @@ import { CreateRecord, GetOpenRecords, GetSectionRecords, GetUserRecords, Remove
 
 const router = Router();
 
-router.get("/", GetUserRecords);
-router.get("/open-db", GetOpenRecords);
-router.get("/of-section/:sectionId", GetSectionRecords);
+router.post("/", GetUserRecords);
+router.post("/open-db", GetOpenRecords);
+router.post("/of-section/:sectionId", GetSectionRecords);
 router.post("/create", CreateRecord);
 router.put("/update", UpdateRecord);
 router.put("/unpublish/:recordId", UnpublishRecord);

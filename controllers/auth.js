@@ -17,10 +17,10 @@ export async function SignIn(req, res) {
     else {
       const userExist = await authRepository.getUser({email : payload.email});
       if (userExist) {
-        res.status(400).send('Wrong password');
+        res.status(401).send('Wrong password');
       }
       else {
-        res.status(400).send('Wrong email');
+        res.status(401).send('Wrong email');
       }
     }
   }
@@ -55,7 +55,6 @@ export async function SignUp(req, res) {
 export async function GetUser(req, res) {
   try {
     const tokenPayload = authorize(req);
-    console.log(tokenPayload);
     if (tokenPayload) {
       const user = await authRepository.getUser({ user_id: tokenPayload.user_id});
       res.status(200).send(user);

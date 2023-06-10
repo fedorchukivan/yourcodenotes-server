@@ -20,7 +20,7 @@ export default class ProjectsRepository {
           title: 'Records without section',
           is_default: true
         }, ['*']).into('sections')
-        .then(sections => ({ ...project, sections}))
+        .then(sections => ({ ...project, sections, users: []}))
         .then(async p => ({ ...p, creator: await this.getUser({ user_id: p.creator_id })}));
       }
     );
