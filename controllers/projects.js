@@ -23,8 +23,6 @@ export async function CreateSection(req, res) {
     const tokenPayload = authorize(req);
     if (tokenPayload) {
       const project = await projectsRepository.getProject({ project_id: req.body.project_id });
-      console.log(project);
-      console.log(tokenPayload);
       if (project && project.creator_id == tokenPayload.user_id)
       {
         const section = await projectsRepository.createSection(req.body);
@@ -33,6 +31,22 @@ export async function CreateSection(req, res) {
       else {
         res.status(401).send('Wrong project');
       }
+    }
+    else {
+      res.status(401).send('Unauthorized!');
+    }
+  }
+  catch (error) {
+    res.status(500).send('Server error');
+  }
+}
+
+export async function RemoveSection(req, res) {
+  try {
+    const tokenPayload = authorize(req);
+    if (tokenPayload) {
+      const section_id = await projectsRepository.removeSection(req.params.sectionId);
+      res.status(200).send(section_id);
     }
     else {
       res.status(401).send('Unauthorized!');

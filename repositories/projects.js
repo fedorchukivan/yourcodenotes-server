@@ -11,6 +11,14 @@ export default class ProjectsRepository {
                             .first();
   }
 
+  removeRecord = async (record_id) => {
+    await this.db('sources').where({ record_id }).del();
+    await this.db('record_tag').where({ record_id }).del();
+    return (await this.db('records')
+                      .where({ record_id })
+                      .del(['record_id']))[0];
+  }
+
   createProject = async (data) => {
     return await this.db.insert(data, ['*']).into('projects').then(
       async (projects) => {
@@ -28,6 +36,19 @@ export default class ProjectsRepository {
   
   createSection = async (data) => {
     return (await this.db.insert(data, ['*']).into('sections'))[0];
+  }
+
+  removeSection = async (section_id) => {
+    return await this.db('records')
+                      .where({ section_id })
+                      .then(async records => {
+                        for (let i = 0; i < records.length;) {
+                          await this.removeRecord(records[i].record_id).then(() => i++);
+                        }
+                      })
+                      .then(async () =>
+                        (await this.db('sections').where({ section_id }).del(['section_id']))[0]
+                      )
   }
   
   fetchProjectsAdditionalInfo = async (projects) => {
