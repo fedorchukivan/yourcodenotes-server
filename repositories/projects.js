@@ -50,6 +50,26 @@ export default class ProjectsRepository {
                         (await this.db('sections').where({ section_id }).del(['section_id']))[0]
                       )
   }
+
+  removeProject = async (project_id) => {
+    return await this.db('sections')
+                      .where({ project_id })
+                      .then(async sections => {
+                        for (let i = 0; i < sections.length;) {
+                          await this.removeSection(sections[i].section_id).then(() => i++);
+                        }
+                      })
+                      .then(async () =>
+                        await this.db('project_participant')
+                                  .where({ project_id })
+                                  .del()
+                                  .then(async () =>
+                                    (await this.db('projects')
+                                              .where({ project_id })
+                                              .del(['project_id']))[0]
+                                  )
+                      )
+  }
   
   fetchProjectsAdditionalInfo = async (projects) => {
     for (let i = 0; i < projects.length;) {

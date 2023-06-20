@@ -57,6 +57,29 @@ export async function RemoveSection(req, res) {
   }
 }
 
+export async function RemoveProject(req, res) {
+  try {
+    const tokenPayload = authorize(req);
+    if (tokenPayload) {
+      const project = await projectsRepository.getProject({ project_id: req.params.projectId });
+      if (project && project.creator_id == tokenPayload.user_id)
+      {
+        const project_id = await projectsRepository.removeProject(req.params.projectId);
+        res.status(200).send(project_id);
+      }
+      else {
+        res.status(401).send('Wrong project');
+      }
+    }
+    else {
+      res.status(401).send('Unauthorized!');
+    }
+  }
+  catch (error) {
+    res.status(500).send('Server error');
+  }
+}
+
 export async function AddParticipant(req, res) {
   try {
     const tokenPayload = authorize(req);
