@@ -17,10 +17,10 @@ export async function SignIn(req, res) {
     else {
       const userExist = await authRepository.getUser({email : payload.email});
       if (userExist) {
-        res.status(401).send('Wrong password');
+        res.status(406).send('Wrong password');
       }
       else {
-        res.status(401).send('Wrong email');
+        res.status(406).send('Wrong email');
       }
     }
   }
@@ -33,12 +33,11 @@ export async function SignUp(req, res) {
   try {
     const user = await authRepository.getUser({email: req.body.email});
     if (user) {
-      res.status(400).send('User already exists');
+      res.status(406).send('User already exists');
     }
     else {
       const user = await authRepository.createUser(req.body)
                         .then(async user_id => await authRepository.getUser(user_id));
-      console.log(user);
       const token = jwtSign({
         user_id: user.user_id,
         email: user.email,
