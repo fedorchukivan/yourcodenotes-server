@@ -134,18 +134,21 @@ export default class RecordsRepository {
   getPublicRecords = async () => {
     return await this.db.select('*').from('records')
                       .where('is_public', true)
+                      .orderBy('created_at', 'desc')
                       .then(this.fetchRecordsAdditionalInfo);
   }
 
   getSectionRecords = async (id) => {
     return await this.db.select('*').from('records')
                       .where('section_id', id)
+                      .orderBy('created_at', 'desc')
                       .then(this.fetchRecordsAdditionalInfo);
   }
 
   getUserRecords = async (user_id) => {
     return await this.db.select('*').from('records')
                       .where('creator_id', user_id)
+                      .orderBy('created_at', 'desc')
                       .then(this.fetchRecordsAdditionalInfo);
   }
 }

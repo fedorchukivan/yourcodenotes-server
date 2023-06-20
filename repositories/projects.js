@@ -95,6 +95,7 @@ export default class ProjectsRepository {
   
   getUserProjects = async (user_id) => {
     return await this.db('projects').where('creator_id', user_id)
+                  .orderBy('title')
                   .then(this.fetchProjectsAdditionalInfo);
   }
   
@@ -107,6 +108,7 @@ export default class ProjectsRepository {
                   .innerJoin('project_participant', 'project_participant.project_id', 'projects.project_id')
                   .from('projects')
                   .where('project_participant.user_id', user_id)
+                  .orderBy('title')
                   .then(this.fetchProjectsAdditionalInfo);
   }
   
